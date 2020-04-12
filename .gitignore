@@ -1,0 +1,12 @@
+#Empty
+__pycache__/
+.vscode/
+.idea/
+.ipynb_checkpoints/
+__MACOSX/
+*.pyc
+/build/
+/dist/
+*.egg-info/
+.~lockProject/data/US_Accidents_Dec19.csv
+Project/data/US_Accidents_Dec19.csv
