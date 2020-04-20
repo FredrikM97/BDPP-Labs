@@ -1,0 +1,93 @@
+# TODO list
+
+## Preprocessing
+* Missing values
+* Convert cities to categorical values
+* Replace true and false with 1 and 0
+* Replace start time with float value
+* Extract labels
+* Ho many unique categorical values?
+
+### Data to remove
+* Remove Nan
+* Remove columns with more than 20-30% missing values
+* Remove  ['ID', 'Source','End_Time', 'End_Lat', 'End_Lng', 'Description'] - Done
+* Remove rows with Nan/check for NAN (Print how many rows that were deleted)
+
+## Analysis
+* Count severity
+* Where did the accidents occur? (State, country, city)
+* Feature importance
+
+# OLD SETUP FROM JUPYTER CODE  - DEPRICATED
+# Preprocess
+# * What Cities to categorical values
+# * Extract labels
+# * Remove unknown data such as end time for accident
+# * Remove rows with Nan/check for NAN
+# * Remove ID column, 
+# * Replace true and false with 0 and 1
+# * Replace start time with float value
+# Decide to remove year from timestamp or not
+
+# Analysis
+# * Missing values
+# * Count severity
+# * Where did the accidents occur?
+# * Weather condition?
+# * Feature importance
+# Two theories: Predict where the accident will be?
+# How severe is the accident?
+
+# Convert coordinates into quantiles, lets say 25, one hot encode them, x*y
+# If this works we could remove cities, zipcodes, country, Airport_Code
+
+ID: string (nullable = true)                     (Not interesting)
+ |-- Source: string (nullable = true)            (Not interesting)
+ |-- TMC: double (nullable = true)               (ok)
+ |-- Severity: integer (nullable = true)         (Label)  
+ |-- Start_Time: timestamp (nullable = true)     (ok)
+ |-- End_Time: timestamp (nullable = true)       (Not interesting)
+ |-- Start_Lat: double (nullable = true)         (ok)
+ |-- Start_Lng: double (nullable = true)         (ok)
+ |-- End_Lat: double (nullable = true)           (Not interesting)
+ |-- End_Lng: double (nullable = true)           (Not interesting)
+ |-- Distance(mi): double (nullable = true)      (ok)
+ |-- Description: string (nullable = true)       (bad)
+ |-- Number: double (nullable = true)            (ok, missing lot of values)
+ |-- Street: string (nullable = true)            (ok) (label?)
+ |-- Side: string (nullable = true)              (ok)
+ |-- City: string (nullable = true)              (ok)
+ |-- County: string (nullable = true)            (ok)
+ |-- State: string (nullable = true)             (ok)
+ |-- Zipcode: string (nullable = true)           (ok)
+ |-- Country: string (nullable = true)           (ok)
+ |-- Timezone: string (nullable = true)          (ok?)
+ |-- Airport_Code: string (nullable = true)      (ok?)
+ |-- Weather_Timestamp: timestamp (nullable = true) (ok?)
+ |-- Temperature(F): double (nullable = true)       (ok)
+ |-- Wind_Chill(F): double (nullable = true)        (ok)
+ |-- Humidity(%): double (nullable = true)          (ok)
+ |-- Pressure(in): double (nullable = true)         (ok)
+ |-- Visibility(mi): double (nullable = true)       (ok)
+ |-- Wind_Direction: string (nullable = true)       (ok)
+ |-- Wind_Speed(mph): double (nullable = true)      (ok)
+ |-- Precipitation(in): double (nullable = true)    (ok)
+ |-- Weather_Condition: string (nullable = true)    (ok)
+ |-- Amenity: boolean (nullable = true)             (ok)
+ |-- Bump: boolean (nullable = true)                       (ok)
+ |-- Crossing: boolean (nullable = true)                   (ok)
+ |-- Give_Way: boolean (nullable = true)                   (ok)
+ |-- Junction: boolean (nullable = true)                   (ok)
+ |-- No_Exit: boolean (nullable = true)                    (ok) 
+ |-- Railway: boolean (nullable = true)                    (ok)
+ |-- Roundabout: boolean (nullable = true)                 (ok)
+ |-- Station: boolean (nullable = true)                    (ok?)
+ |-- Stop: boolean (nullable = true)                       (ok?)
+ |-- Traffic_Calming: boolean (nullable = true)            (ok)
+ |-- Traffic_Signal: boolean (nullable = true)             (ok?)
+ |-- Turning_Loop: boolean (nullable = true)               (ok)
+ |-- Sunrise_Sunset: string (nullable = true)              (ok)
+ |-- Civil_Twilight: string (nullable = true)              (ok)
+ |-- Nautical_Twilight: string (nullable = true)           (ok)
+ |-- Astronomical_Twilight: string (nullable = true)       (ok?)
