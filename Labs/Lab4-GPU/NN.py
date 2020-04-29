@@ -45,16 +45,27 @@ class MLP():
         dZ[Z <= 0] = 0
         return dZ
 
-    def single_layer_forward_propagation(self, A, W, b, activation="relu"):
+    def single_layer_forward_propagation(self, A, W, b, activation="relu"): # Done
         # TODO: calculate Z, the input value for the activation function of the layer
         #
+        Z = np.dot(W, A) + b
+        
+        if activation is "relu":
+            activation_func = relu
+            
+        elif activation is "sigmoid":
+            activation_func = sigmoid
+        
+        else:
+            raise Exception('Activation function does not exist!')
+        
         return activation_func(Z), Z
 
     def full_forward_propagation(self, X):
         # creating a temporary memory to store the information needed for a backward step
         memory = {}
         # X vector is the activation for layer 0
-        A_curr = X
+        y = X
 
         # TODO: iterate over network layers and do the calculations of the activation values for each layer
         #  based on the input of the previous layer and the weights of the current layer.
@@ -64,7 +75,17 @@ class MLP():
         #  and the inputs of the activation function Z, where memory['Z1'] = W1*X+b1, memory['Z2'] = W2*A1+b2, etc...
 
         #  [Your code goes here]
-
+        for idx, layer in enumerate(self.nn_architecture):
+            layer_idx = idx + 1
+            y_prev = y
+            activ_function_curr = layer["activation"]
+            W = self.params_values["W" + str(layer_idx)]
+            b = self.params_values["b" + str(layer_idx)]
+            y, Z = single_layer_forward_propagation(y_prev, W, b, activ_function_curr)
+            
+            memory["A" + str(idx)] = y_prev
+            memory["Z" + str(layer_idx)] = Z
+            
         # return of prediction vector and a dictionary containing intermediate values
         return y, memory
 
@@ -72,7 +93,7 @@ class MLP():
         # number of examples
         m = Y_hat.shape[1]
         # TODO: calculate of the cost according to the binary cross-entropy formula
-        cost = 0
+        cost = -1 / m * (np.dot(Y, np.log(Y_hat).T) + np.dot(1 - Y, np.log(1 - Y_hat).T))
         return np.squeeze(cost)
 
     # an auxiliary function that converts probability into class label
@@ -148,6 +169,10 @@ class MLP():
         # TODO: iterate over network layers and update the values of W and b stored in params_values based on the gradients stored in grads_values.
         #  This dictionary contains the gradients values for each layer in the form grads_values['dW1], grads_values['db1], etc...
         #  which represent dL/dw1, dL/db1 respectivly, and the same for each layer.
+        for layer_idx, layer in enumerate(self.nn_architecture,1):
+            
+            self.params_values["W" + str(layer_idx)] -= learning_rate * grads_values["dW" + str(layer_idx)]        
+            self.params_values["b" + str(layer_idx)] -= learning_rate * grads_values["db" + str(layer_idx)]
 
         return
 
@@ -161,8 +186,15 @@ class MLP():
         #  Remember to calculate the cost and accuracy after each forward pass to store the values in the cost_history, and accuracy_history for monitoring
         for i in range(epochs):
 
-            # [Your code goes here]
+            Y_hat, cashe = self.full_forward_propagation(X)
+            cost = self.get_cost_value(Y_hat, Y)
+            
+            accuracy = self.get_accuracy_value(Y_hat, Y)
+            accuracy_history.append(accuracy)
 
+            grads_values = self.full_backward_propagation(Y_hat, Y, cashe)
+            self.update( grads_values, self.nn_architecture, learning_rate)
+            
             if (i % 100 == 0):
                 if (verbose):
                     print("Iteration: {:05} - cost: {:.5f} - accuracy: {:.5f}".format(i, cost, accuracy))
