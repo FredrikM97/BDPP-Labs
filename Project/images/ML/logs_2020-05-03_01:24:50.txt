@@ -34,3 +34,9 @@ Missing values:
 
 2020-05-03 01:26:44
 Weather condition: [Row(Weather_Condition='Clear', count=253070), Row(Weather_Condition='Fair', count=103016), Row(Weather_Condition='Mostly Cloudy', count=60440), Row(Weather_Condition='Partly Cloudy', count=59555), Row(Weather_Condition='Overcast', count=58472), Row(Weather_Condition='Scattered Clouds', count=29356), Row(Weather_Condition='Cloudy', count=24959), Row(Weather_Condition='Haze', count=21830), Row(Weather_Condition='Light Rain', count=20437), Row(Weather_Condition=None, count=12881), Row(Weather_Condition='Rain', count=6438), Row(Weather_Condition='Fog', count=4138), Row(Weather_Condition='Heavy Rain', count=2246), Row(Weather_Condition='Smoke', count=1923), Row(Weather_Condition='Fair / Windy', count=1244)]Rows removed: 16080
+
+2020-05-03 01:29:16
+Feature set size647124
+
+2020-05-03 01:31:05
+Unique column values: [Row(Start_Hour=24), Row(Start_Month=12), Row(Weather_Hour=24), Row(Weather_Month=12), Row(Side=3), Row(Wind_Direction=24), Row(Weather_Condition=14), Row(Amenity=2), Row(Bump=2), Row(Crossing=2), Row(Give_Way=2), Row(Junction=2), Row(No_Exit=2), Row(Railway=2), Row(Roundabout=2), Row(Station=2), Row(Stop=2), Row(Traffic_Calming=2), Row(Traffic_Signal=2), Row(Turning_Loop=1), Row(Sunrise_Sunset=2), Row(Civil_Twilight=2), Row(Nautical_Twilight=2), Row(Astronomical_Twilight=2), Row(position=3692)]
