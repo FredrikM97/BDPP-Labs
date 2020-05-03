@@ -1,0 +1,122 @@
+
+def createParams(algorithm, evaluator=MulticlassClassificationEvaluator(), k=10):
+    """
+    Create a crossValidator object for each algorithm with corresponding parameters
+    
+    Parameters
+    ----------
+    algorithm: 2D-list with tuple object 
+        Carries the model object, and corresponding parameters
+    evaluator: obj, Optional, default='MulticlassClassificationEvaluator()'
+        Evaluator algorithm
+    k: int, Optional, default='10'
+        how many folds for CV
+    
+    Return
+    ----------
+    cvAlgs: list
+        List of Crossvalidator objects
+    """
+    
+    cvAlgs = []
+    for model in algorithm:
+        pipeline = Pipeline(stages=[model[0][0]])
+        print("Model:",model[0][0])
+        paramGrid = ParamGridBuilder()
+        
+        for index, param in enumerate(model[1:]):
+            if index == 0: pass
+            print("Parameter Added:",*param)
+            paramGrid.addGrid(*param) 
+        
+        cv = CrossValidator(estimator=pipeline,
+                          estimatorParamMaps=paramGrid.build(),
+                          evaluator=evaluator,
+                          numFolds=k) # Replace with 10 
+        cvAlgs.append(cv)
+        
+    return cvAlgs
+
+def evaluateAlgorithm(models, trainSet):
+    """
+    Fit each of the Crossvalidator objects and returns the best model
+    
+    Parameters
+    ----------
+    models: list
+        Each of the models that shall be fitted
+    trainSet: Dataframe
+        Dataset for training
+  
+    
+    Return
+    ----------
+    bestModels: list
+        Best model from each Crossvalidator
+    """
+    
+    
+    bestModels = []
+    for cv in models:
+        print("Fitting model:",cv)
+        cvModel = cv.fit(trainSet).bestModel
+        bestModels.append(cvModel)
+        print(cvModel)
+        
+    return bestModels
+
+def makePredictions(model, testSet):
+    """
+    Make predictions based on model and testSet
+    
+    Parameters
+    ----------
+    model: Object
+        Model
+    testSet: Dataframe
+        Set of dataframe to test the model
+        
+    Return
+    ----------
+    Result: Object
+        Result of model
+    """
+    
+    return cvModel.transform(testSet)
+    
+def getBestModel(bestModels,testSet):
+    """
+    Decides which model that is considered best (Final model) 
+    
+    TODO: Change criteria for best model.
+    
+    Parameters
+    ----------
+    bestModels: list
+        Each model
+    
+    Return
+    ----------
+    bestModel: Object
+        The final model decided
+    """
+   
+    bestModel = (None,0)
+    for cvModel in bestModels:
+        
+        try:
+            trainingSummary = cvModel.stages[-1].summary
+        except Exception as e:
+            derp = trainingSummary = cvModel.stages[-1]
+            #derp = makePredictions(model, testSet).select('prediction')
+            print("Error occured! Decision tree?",derp)
+            #print("Evaluate model:",cvModel, "Accuracy:",cvModel.)
+            print(derp.toDebugString) 
+            print(e)
+           
+        
+        
+        print("Evaluate model:",cvModel, "Accuracy:",trainingSummary.accuracy)
+        if bestModel[1] < trainingSummary.weightedFMeasure():
+            bestModel = (cvModel, trainingSummary.weightedFMeasure())
+    return bestModel[0]

@@ -6,5 +6,5 @@ https://books.google.se/books?id=cnc5DwAAQBAJ&pg=PA254&lpg=PA254&dq=spark+can+i+
 * Optimization of spark "kernel" - Minimize GC, improve efficency
 * Reduce feature vector
 * Analyse relevant data
-* Since we cant have all in memory we need to cache (increases GC time, more loading from storage)
+* Since we cant have all in memory we need to cache (increases GC time, more loading from storage), However since we can modify Storage memory this is hereby fixed
 * Further improvements: Categorical values of weather and missing values (Unknown, low, medium, high), would reduce the amount of missing values and hopefully give a better value or get removed by a selection method -> Embedding might be needed
