@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.tuning.CrossValidatorModel","timestamp":1588611626161,"sparkVersion":"2.4.5","uid":"CrossValidatorModel_4d6073e762eb","paramMap":{"numFolds":3,"seed":880116102,"estimatorParamMaps":[[]]},"defaultParamMap":{"numFolds":3,"seed":880116102},"avgMetrics":[],"persistSubModels":false}
