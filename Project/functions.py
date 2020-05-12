@@ -1,20 +1,26 @@
-from pyspark.sql.functions import when, count, col, isnan, countDistinct,from_unixtime,from_utc_timestamp, unix_timestamp,split, to_timestamp, hour, month, lit,collect_list
+from pyspark.sql.functions import when, count, col, isnan, countDistinct,from_unixtime,from_utc_timestamp, unix_timestamp,split, to_timestamp, hour, month, lit,collect_list, max
 import seaborn as sns 
 import matplotlib.pyplot as plt 
 from datetime import datetime
 from pyspark.sql import SparkSession
 from pyspark import SparkContext, SparkConf
 from pyspark.ml.tuning import CrossValidator
-from numpy import argmax # TODO replace with something else
+from datetime import datetime
+from numpy import argmax
+from sklearn.metrics import classification_report, confusion_matrix
 
 class logging():
-    def __init__(self, models_dir, logs_dir, image_dir, timeSignature, enabled=False):
-        self.models_dir = models_dir
-        self.logs_dir = logs_dir
-        self.image_dir = image_dir
-        self.timeSignature = timeSignature
+    def __init__(self, models_dir, logs_dir, image_dir, foldername, enabled=False):
+        self.timeSignature = str(datetime.now().strftime("%Y%m%d%H%M%S"))
+        foldername = foldername + "_" +self.timeSignature
+        self.models_dir = models_dir + "/" +foldername +"/" 
+        self.logs_dir = logs_dir + "/" +foldername + "/logs.md" 
+        self.image_dir = image_dir +"/" + foldername +"/" 
+        
         self.enabled = enabled
-        self.createDirectory(models_dir+"/"+timeSignature +"/")
+        
+        self.createDirectory(self.logs_dir)
+        
     
     def createDirectory(self,folder):
         """
@@ -102,13 +108,13 @@ class logging():
         if self.enabled==False: return None
         if models_dir == None: models_dir = self.models_dir
             
-        print(f"Saving into: {models_dir}/{self.timeSignature}/{model_name}")
+        print(f"Saving into: {models_dir}{model_name}")
         try:
-            model.write.format('parquet').mode('overwrite').option("header", "true").save(f"{models_dir}/{self.timeSignature}/{model_name}")
+            model.write.format('parquet').mode('overwrite').option("header", "true").save(f"{models_dir}/{model_name}")
             print("Saving through format 1")
         except Exception as e:
             print(e)
-            model.write().overwrite().save(f"{models_dir}/{self.timeSignature}/{model_name}")
+            model.write().overwrite().save(f"{models_dir}/{model_name}")
             print("Saving through format 2")
            
     def setLogDir(self, logs_dir):
@@ -334,11 +340,19 @@ def evaluateModel(estimator,
     logger.write2file("Evaluating "+ str(modelType) +" predictions..","")
     
     accuracy = evaluator.evaluate(predictions)
-    params = model.getEstimatorParamMaps()[ argmax(model.avgMetrics)]
+    params = model.getEstimatorParamMaps()[argmax(model.avgMetrics)]
     
     logger.write2file("Evaluating "+ str(modelType),"Display 5 datapoints:\n" + str(samplePredict.take(5)) + "\nAccuracy: " + str(accuracy)+"\nParameters:\n" + str(params))
     logger.write2fileModel(model, str(modelType))
     samplePredict.show(5)
     print("Accuracy: ",accuracy, "\nParameters\n",params)
+
+    y_true = predictions.select(['label']).collect()
+    y_pred = predictions.select(['prediction']).collect()
+
+    print(f"Classification report:\n{classification_report(y_true, y_pred)}")
+    print(f"Confusion matrix:\n{confusion_matrix(y_true, y_pred)}")
+    
+   
     
     return model, predictions
