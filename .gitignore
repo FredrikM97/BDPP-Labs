@@ -10,3 +10,6 @@ __MACOSX/
 *.egg-info/
 .~lockProject/data/US_Accidents_Dec19.csv
 Project/data/US_Accidents_Dec19.csv
+./.git/objects/pack/pack-1bb381bcbe1f1d4bef16c956209c80c6540ccd99.pack
+./Project/data/US_Accidents_Dec19.csv
+/Project/models/
