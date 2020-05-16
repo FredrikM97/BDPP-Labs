@@ -7,7 +7,6 @@ from pyspark import SparkContext, SparkConf
 from pyspark.ml.tuning import CrossValidator
 from datetime import datetime
 from numpy import argmax
-from sklearn.metrics import classification_report, confusion_matrix
 
 class logging():
     def __init__(self, models_dir, logs_dir, image_dir, foldername, enabled=False):
@@ -347,12 +346,10 @@ def evaluateModel(estimator,
     samplePredict.show(5)
     print("Accuracy: ",accuracy, "\nParameters\n",params)
 
-    y_true = predictions.select(['label']).collect()
-    y_pred = predictions.select(['prediction']).collect()
+    predLabel = predictions.select([col('label').cast('float'),col('prediction').cast('float')])
+    metrics = MulticlassMetrics(predLabel.rdd)
 
-    print(f"Classification report:\n{classification_report(y_true, y_pred)}")
-    print(f"Confusion matrix:\n{confusion_matrix(y_true, y_pred)}")
-    
-   
+    print("Confusion matrix:", metrics.confusionMatrix())
+
     
     return model, predictions
