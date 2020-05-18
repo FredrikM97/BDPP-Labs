@@ -12,3 +12,4 @@ Debugging:
 * Since the program logs data if log_mode is enabled then they will per default be stored into a "models" and "analysis" folder, the log_mode include storing: actions, images and models. 
 * The debug_mode limits the number of data points to give faster processing. enable_plots decide if plots should be displayed. Since they call on pandas dataframe for plotting they are optional to use!
 
+Dataset: https://www.kaggle.com/sobhanmoosavi/us-accidents

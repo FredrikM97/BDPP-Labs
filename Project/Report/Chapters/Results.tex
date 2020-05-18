@@ -1,0 +1,22 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Result}
+The tests for the models were carried out with the same parameters for everyone to give a better overview of how the models performed. Logistic regression used the following parameters regParam: [0.1,0.01], maxIter: [10], elasticNetParam: [0.6]. Decision tree used the default settings. Random forest used numTrees: [15]. After reducing the number of rows, and performing preprocessing the final number of rows went from 2974335 to 2865076 and a total of 250 features that according to PCA covers 97.04\% of the dataset.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ccccc}
+\hline
+\multicolumn{1}{l}{\textbf{Test}} & \multicolumn{1}{l}{\textbf{State}} &   \multicolumn{1}{l}{\textbf{LR}} & 
+\multicolumn{1}{l}{\textbf{DT}} & 
+\multicolumn{1}{l}{\textbf{RF}} \\ \hline
+1 & all & 56.5\% & 58.3\% & 53.9\% \\ \hline
+2 & CA & 65.5\% & 54.6\% & 54.7\%  \\ \hline
+3 & TX & 70.7\% & 67.6\% & 60.8\%  \\ \hline
+4 & PA & 75.4\% & 72.9\% & 64.5\%  \\ \hline
+5 & FL & 69.8\% & 67.9\% & 53.3\%  \\ \hline
+\end{tabular}
+\caption{Accuracy of each model based on 10 fold cross validation for each algorithm and on different states. Logistic regression (LR), Decision tree (DT), Random forest (RF) were tested.}
+\label{tab:result_params}
+\end{table}
+\end{document}

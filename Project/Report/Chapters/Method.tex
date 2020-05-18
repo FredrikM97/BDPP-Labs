@@ -1,0 +1,119 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Method}
+The project is structured in five categories that can be observed in table \ref{tab:project_struct}. 
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\hline
+\textbf{Steps} & \textbf{Method}   \\ \hline
+1.             & Analysis          \\ \hline
+2.             & Preprocessing     \\ \hline
+3.             & Feature selection \\ \hline
+4.             & Machine learning  \\ \hline
+5.             & Model evaluation  \\ \hline
+\end{tabular}
+\caption{Project structure}
+\label{tab:project_struct}
+\end{table}
+
+\subsection{Analysis}
+In order to give as understanding the following data were observed. The dataset covers 49 states of the US. The dataset is based on open source from a report on A Countrywide Traffic Accident Dataset\cite{moosavi2019countrywide} and Accident Risk Prediction based on Heterogeneous Sparse Data:  New Dataset  and  Insights.\cite{moosavi2019accident}. The severity level between 1-4, where 1 indicates the least impact and 4 is high impact on traffic.
+
+The project started by conducting a comprehensive analysis of the data. To gain an understanding of the information from the dataset, some interesting data is presented, for a deeper insight check the dataset or the project analysis. The data includes which types of data that exists (string, double, bool). Then how many labels, classes and numerical values that exists. The total set consist of 2,974,335 rows, the columns is divided into one label, 28 classes and 12 numeric columns, as well as six columns deleted which included data not to be processed as text analysis and unique identifiers for each data point. Observations were made that several columns contained no value, for example. Precipitation (in) contained 1998358 missing values, Number contained 1917605 missing values. These needed to be either antedated or reduce the number of rows, but since a larger majority was missing, it was decided to remove the columns completely. 
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+\multicolumn{1}{l}{\textbf{Severity}} & \multicolumn{1}{l}{\textbf{Weather conditions}} & \multicolumn{1}{l}{\textbf{State}} & \multicolumn{1}{l}{\textbf{Missing values}} \\ \hline
+1 (0\%) & Clear (808171) & CA (653172) & Precipitation (in) (1995584) \\ \hline
+2 (67\%) & Mostly cloudy (405136) & TX (296044) & Number (1880955) \\ \hline
+3 (30\%) & Overcast (382479) & FL (220711) & TMC (678948) \\ \hline
+4 (3\%) & Fair (311864) & SC (146340) & Wind\_Speed(mph) (439231) \\ \hline
+\end{tabular}%
+}
+\caption{Oversight of data. The parentheses containing the observed data point and number of occurances of the category.}
+\label{tab:Data_distribution}
+\end{table}
+
+The highest probability of accidents occurred around 2-4 during the night and at least around 16-22, figure \ref{fig:accident_hour}. In table \ref{tab:Data_distribution} additional information on the top occurrences of data is displayed. In figure \ref{fig:pie_severity} a pie plot of the Severity can be observed. In figure \ref{fig:severity_dist_class} the distribution of severity in each state is observed to give a closer look on what should be expected as result from the machine learning.
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll}
+\hline
+\textbf{Analysis}                        & \textbf{Description}                           \\ \hline
+Correlation                              & Variable correlated with each other.           \\ \hline
+Severity distribution                    & How many sample of each label existed          \\ \hline
+Distribution over each state             & Accident in each state                         \\ \hline
+Distribution of severity over each state & Severity of accidents in each state            \\ \hline
+Weather conditions                       & Condition of each accident                     \\ \hline
+Time of accident (Hour)                  & At which hour most accidents occur             \\ \hline
+Time of accident (Month)                 & At which month most accidents occur            \\ \hline
+Map distribution of accidents            & A map that shows the distribution of accidents \\ \hline
+\end{tabular}%
+}
+\caption{Which form of analysis that were used for the project.}
+\label{tab:analysis}
+\end{table}
+
+\subsection{Preprocessing}
+During preprocessing, methods were used for filters, select, groupBy, persist, unpersist and  resilient distributed dataset (RDD). Several of the methods used improved performance in comparison of using pandas but persist and unpersist stood out among the crowd. By storing a data set in memory it was able to communicate between operations and according to Apache Spark's documentation it can speed up operations as much as 10x. Table \ref{tab:preprocess_model} gives an overview of what is done during the preprocess.
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll}
+\hline
+\textbf{Method} & \textbf{Description} \\ \hline
+Select state & Select a specific state if wanted \\ \hline
+Modify time & Process timestamp to categories of hours and month \\ \hline
+Quantilization and clustering  & Quantile/cluster data based on coordinates  \\ \hline
+Cast/extract types & Cast data to correct type and divide into different variables \\ \hline
+Clean data & Remove data with less occurance than 1\% \\ \hline
+Remove categories & Remove categories if unique value is 1 \\ \hline
+Pipeline & Imputer, MinMaxScaler, StringIndexer, one-hot encoding \\ \hline
+Combine features & Create one single feature vector of data \\ \hline
+\end{tabular}%
+}
+\caption{The process of cleaning and working with the data before machine learning.}
+\label{tab:preprocess_model}
+\end{table}
+Given that one-hot encoding is used, the feature vector must not be too large since it can cause memory issues during machine learning even if Spark is applied. In order to reduce the vector unnecessary data that does not contribute to predicting the target value should be excluded. Since the number of features increases more than desirable when models focus at street level, clustering is applied for both longitude and latitude feature. The alternative is to implicitly combine Zip Code, Country, Airport\_Code and City to reduce the number of categories without losing larger amounts of information since Airport\_Code and zip Code does not provide any additional knowledge to the feature vector. The choice of the discard streets column is based on the fact that it contains too many unique values (160715) and generates to many unique features that can cause the model to overfit. The same is given by Zip Code which contained 377152 unique values. By applying clustering the feature vector required to describe a location is reduced, instead of using categorical values for state and street the coordinates were clustered into a new feature named position. With the help of clustering it is possible to focus on smaller locations, for example states to produce a better model that divides the positions even thinner to increase accuracy. As an example with clustering with a k value of 250. These centroids should be divided and to match the data. When specifying a smaller set of data it can distinguish the locations more accurate. Alternative is to increase the k value which would imply a bigger feature vector. 
+
+During preprocessing, it is also possible to filter states by using filter to gain a better understanding of how the model performs on smaller sets of data and shorten the processing and modelling time. In order to select all states the parameter is configured to 'ALL', otherwise states is defined as example: 'CA', 'TX', 'FL'.
+
+
+Timestamp for when accident occurred and timestamp since last weather lookup was preprocessed and extracted as hour and month features. Since there is different timezones in the US the timestamp was converted to correspond to the correct timezone. Based on the analysis it was decided that from "Weather frequency", figure \ref{fig:weather_cond_dist}, all scenarios below 1\% would be removed with groupBy to minimize the number of unique classes. Columns containing only one feature were also discarded since they do not provide any valuable information to machine learning.
+
+Prior to machine learning, four steps of preprocessing were carried out including all numeric values being processed with imputes with the strategy median. For the mathematical calculation of normalization, MinMaxScaler\footnote{\url{https://spark.apache.org/docs/2.1.0/ml-features.html#minmaxscaler}} is used where min (0.0) is the lower limit and max (1.0) is the upper limit 
+For the categorical values, StringIndexer and OneHotEncoderEstimator were used to create a vector of features. In addition to preprocessing the numerical and categorical features they need to be combined into a final feature vector which is processed using VectorAssembler. 
+
+\subsection{Quantiles and clustering}
+Two methods for grouping data was tested, quantiles and clustering. Quantiles is based on a theory from google crash course\footnote{\url{https://developers.google.com/machine-learning/clustering/prepare-data}} for machine learning. This means that the data in the columns Start\_Lat and Start\_Lng needed to be divided into equal quantities by QuantileDiscretizer, then indexed with StringIndexer and finally one-hot-encoded. This gives us two vectors for coordinates. Then cross product is applied to create a new vector that describes surfaces according to feature crossing\footnote{\url{https://developers.google.com/machine-learning/crash-course/feature-crosses/crossing-one-hot-vectors}}. However due to limitations between one-hot-encoding and feature crossing, which resulted in an overflow in the Spark heap, the second solution was to apply clustering through K-means (KMeans) and do a machine learning evaluation which would reduce the number of positions but increase performance. In figure \ref{fig:Clustering_centroids} the different centroids and the corresponding data point is displayed. The figure is placed upon the state CA and one color can display different cluster due to that the total number of centroids is 400. 
+
+
+\subsection{Feature selection}
+The features that are relevant were used to determine the principal component analysis (PCA) and ChiSqSelector. PCA \cite{wold1987principal} is used to capture essential data patterns which can be used to determine how many features are needed to describe over 90\% of the dataset. This is done by utilizing the variance of each feature. ChiSqSelector \cite{liu1995chi2} is used to select which features are most relevant within the k value limit that is extracted from PCA. This is done to reduce the machining time of the machine learning and hopefully remove unnecessary information. According to table \ref{tab:feature_select} it is possible to see how the feature vector size is reduced and how much data it covers according to PCA.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ccccc} \hline
+\multicolumn{1}{l}{\textbf{Pior-FV}} & \multicolumn{1}{l}{\textbf{Post-FV}} & \multicolumn{1}{l}{\textbf{Prior-Rows}} & \multicolumn{1}{l}{\textbf{Post-Rows}} & \multicolumn{1}{l}{\textbf{PCA}} \\ \hline
+ 5593 & 250 & 2974335 & 2819074 & 97.04\% \\ \hline
+\end{tabular}
+\caption{How the models performed and how the feature vector (FV) changed and how the number of rows were reduced when using State parameter as 'ALL'.}
+\label{tab:feature_select}
+\end{table}
+\subsection{Machine learning}
+
+For machine learning, 80\% of the computer was used for training and 20\% for testing. The models are evaluated through MulticlassClassificationEvaluator and Crossvalidator from Spark by testing several different grid parameters and selecting the best model from Logistic regression, Decision tree and Random forest. Each model present a model and evaluated through accuracy based on the cross-validation and a confusion matrix which gives the true and predicted values of the model.
+\end{document}
