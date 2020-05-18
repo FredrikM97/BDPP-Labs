@@ -1,0 +1,22 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\section{Background}
+
+In recent years it has become increasingly popular to utilize parallelization to efficiently multitask and utilize the performance for data analysis. Spark works very well for preprocessing and could be complemented to tensorflows ML library in order to create efficient and powerful operations. The difference between spark and pandas depends on the dataset. Pandas works better for small sets but not as great when the size is greater than the memory given to the process.
+
+Cloud computing has become an increasingly popular topic for big data. Cloud computing allows companies to rent cloud services in order to reduce maintenance costs and spend more time processing and managing information. Services such as IBM cloud, Microsoft Azure and Google Cloud are companies that rent out cloud-based services and enable data management through the Jupyter labs for python and Spark over the internet. This project consists of using IBM cloud to analyze, preprocess and perform machine learning on data.
+
+\subsection{State-of-the-art}
+According to an article on \textit{The rise of big data on cloud computing: Review and open research issues} \cite{hashem2015rise}, it describes how Cloud computing has become a standard for large-scale and complex computing by utilizing parallel processing, security and service interaction with scalable data storage. This adds lower infrastructure maintenance and costs to businesses. Companies offering cloud computing services include IBM, Microsoft Azure, Google and Amazon AWS.
+
+According to \textit{Big data processing in cloud computing environments} \cite{ji2012big}, it exists multiple different distributed file systems as Google File System (GFS) and Hadoop Distributed File System (HDFS) which is an open source version of GFS. According to \cite{hashem2015rise} HDFS can run on top of local file system of cluster nodes and store large files suitable for streaming data. It provides fauilt tolerance and scaling from one to thousands of nodes. The architecture is built upon a master and slave relationship.  D. Kossmann et al.\cite{kossmann2010evaluation} presents four different architectures which is based on multi-tier database application architecture including partitioning, replication, distributed control and caching architecture. This architecture can be used in order to handle large data processing models that commercial database management system (DBMS) are not suitable for.
+In order to acheive better scalability and performance when processing big data, parallelization techniques and algorithms is applied. MapReduce is a popular algorithm proposed by Google that is based on GFS and adapted through Hadoop. MapReduce major advantages is that it hides details related to data storage, distribution, replication, load balancing and simplifies for developers by only specifying two functions: the map and reduce function. Multiple projects utilizes MapReduce including Spark\cite{zaharia2010spark}, Hive\cite{thusoo2009hive}, YARN\cite{ekanayake2010twister} Alternative models for handling large amounts of data are provided by RankReduce \cite{stupar2010rankreduce}, which combines Local Sensitive Hashing and MapReduce to implement KNN in high-dimensional spaces.
+
+\textit{Performance Prediction for Apache Spark Platform} \cite{wang2015performance} explains how Spark is used as a distributed data processing platform that utilizes distributed memory to process large volumes of data in a efficient approach. The report gives an introduction till how Spark operates, how job execution of tasks is carried out and how memory usage affect the performance.
+
+
+\subsection{Setup}
+
+The project utilises \textit{Apache Spark 2.x Cookbook} \cite{yadav2017apache} to optimise and streamline model creation through a docker container on local computer to improve memory and garbage collector (GC) performance. Additional google crash course and course material is used to give an overview on what theoretical operations that should be used to produce reasonable preprocessing steps, both for clustering and for classification. Python 3.7 is used combined with Spark 2.4.5 in order to work with both IBM cloud and local docker container. The environment used was Jupyter labs which is an extension of Jupyter notebook for additional features in development.
+
+\end{document}
