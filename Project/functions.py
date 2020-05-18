@@ -19,24 +19,38 @@ class logging():
         
         self.enabled = enabled
         
-        self.createDirectory(self.logs_dir)
+        self.createDirectory(self.models_dir, self.logs_dir, self.image_dir)
         
     
-    def createDirectory(self,folder):
+    def createDirectory(self,models_folder, logs_folder,image_folder):
         """
         Creates empty folder if it does not exist
 
         Parameters
         ----------
-        folder: string
+        models_folder: string
+            Path to folder
+        logs_folder: string
+            Path to folder
+        image_folder: string
             Path to folder
         Return
         ----------
         """
         if self.enabled==False: return None
         import os
-        os.makedirs(os.path.dirname(folder))
-        
+        try:
+            os.makedirs(os.path.dirname(models_folder))
+        except:
+            pass
+        try:
+            os.makedirs(os.path.dirname(logs_folder))
+        except:
+            pass
+        try:
+            os.makedirs(os.path.dirname(image_folder))
+        except:
+            pass
         
     def write2file(self, title, info, logs_dir=None):
         """
@@ -80,9 +94,10 @@ class logging():
         if self.enabled==False: return None
         if image_dir == None: image_dir = self.image_dir
         try:
-            image.figure.savefig(image_dir +"/" + name)
-        except:
-            image.savefig(image_dir +"/" + name)
+            image.figure.savefig(image_dir + name)
+        except Exception as e:
+            print("Error",e)
+            image.savefig(image_dir + name)
             
     def write2fileModel(self, model, model_name, models_dir=None):
         """
