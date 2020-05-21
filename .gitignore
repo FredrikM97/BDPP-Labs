@@ -15,3 +15,5 @@ Project/data/US_Accidents_Dec19.csv
 /Project/models/./Project/Code_analysis/data/US_Accidents_Dec19.csv
 ./.git/objects/pack/pack-c41d5a66d132f870a563ad9903e2efc8041ad337.pack
 ./Project/Code_analysis/data/US_Accidents_Dec19.csv
+*US_Accidents_Dec19.csv
+*.zip
