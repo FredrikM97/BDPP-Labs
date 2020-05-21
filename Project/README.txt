@@ -1,4 +1,4 @@
-BDPP_Project-ML-Combined contains all the data needed for analysis and preprocessing. 
+BDPP_Project-Cloud contains all the data needed for analysis and preprocessing. 
 
 # Overview
 * Since all is run through one file there is different stages, IBM does not handle different types in the columns therefor they are casted at the beginning after importing the data.
@@ -12,4 +12,10 @@ Debugging:
 * Since the program logs data if log_mode is enabled then they will per default be stored into a "models" and "analysis" folder, the log_mode include storing: actions, images and models. 
 * The debug_mode limits the number of data points to give faster processing. enable_plots decide if plots should be displayed. Since they call on pandas dataframe for plotting they are optional to use!
 
+NOTICE:
+* Models folder might be empty since its purpuse is to store the fitted models, however, they take some space and is therefor excluded in the zip folder. 
+
+Dataset: https://www.kaggle.com/sobhanmoosavi/us-accidents
+
+=======
 Dataset: https://www.kaggle.com/sobhanmoosavi/us-accidents
