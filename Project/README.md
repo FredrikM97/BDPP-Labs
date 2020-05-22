@@ -16,6 +16,3 @@ NOTICE:
 * Models folder might be empty since its purpuse is to store the fitted models, however, they take some space and is therefor excluded in the zip folder. 
 
 Dataset: https://www.kaggle.com/sobhanmoosavi/us-accidents
-
-=======
-Dataset: https://www.kaggle.com/sobhanmoosavi/us-accidents
