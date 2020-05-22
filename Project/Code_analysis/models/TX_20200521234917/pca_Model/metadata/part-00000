@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.PCAModel","timestamp":1590105803053,"sparkVersion":"2.4.5","uid":"PCA_e1243cb1a05e","paramMap":{"k":250,"inputCol":"features","outputCol":"pca_features"},"defaultParamMap":{"outputCol":"PCA_e1243cb1a05e__output"}}
